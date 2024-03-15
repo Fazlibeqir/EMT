@@ -1,4 +1,4 @@
-# Lab1
+# [Lab1](https://github.com/Fazlibeqir/EMT/tree/main/Lab1/Library)
 ## Library Management System API
 
 This project is a Spring Boot application that serves as an API for a library management system. It includes functionality for librarians to manage books in a library, such as adding new books, deleting books that are no longer in good condition, updating book records, and marking books as rented, same for authors and countries
