@@ -25,7 +25,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> web.ignoring().anyRequest();
     }
-    @Bean
+//    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)throws Exception{
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth)->auth
@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 ).formLogin((login)->login.permitAll()
                         .failureUrl("/login?error=BadCredentials")
-                        .defaultSuccessUrl("/api/**",true)
+                        .defaultSuccessUrl("/api/books",true)
                 ).logout((logout)->logout
                         .logoutUrl("/logout")
                         .clearAuthentication(true)
