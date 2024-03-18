@@ -42,7 +42,7 @@ public class AuthorServiceImpl implements AuthorService {
         Author author = findById(id).orElseThrow(InvalidAuthorId::new);
         author.setName(name);
         author.setSurname(surname);
-        author.setCountry(contryService.findById(id).orElseThrow(InvalidCountryId::new));
+        author.setCountry(contryService.findById(countryId).orElseThrow(InvalidCountryId::new));
         return Optional.of(authorRepository.save(author));
     }
 
