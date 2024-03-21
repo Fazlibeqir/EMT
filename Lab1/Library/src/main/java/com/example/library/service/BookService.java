@@ -13,5 +13,6 @@ public interface BookService {
     Optional<Book> create(String name, Category category, Long authorId, Integer availableCopies);
     Optional<Book> update(Long id, String name, Category category, Long authorId, Integer availableCopies);
     Optional<Book> delete(Long id);
+    void bookCreated();
     Optional<Book> lowerAvailableCopies(Long id) throws NoAvailableCopies;
 }

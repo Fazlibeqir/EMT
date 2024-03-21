@@ -2,12 +2,15 @@ package com.example.library.service.impl;
 
 import com.example.library.model.Book;
 import com.example.library.model.Category;
+import com.example.library.model.events.BookCreatedEvent;
 import com.example.library.model.exceptions.InvalidAuthorId;
 import com.example.library.model.exceptions.InvalidBookIdException;
 import com.example.library.model.exceptions.NoAvailableCopies;
 import com.example.library.repository.BookRepository;
 import com.example.library.service.AuthorService;
 import com.example.library.service.BookService;
+import jakarta.transaction.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +20,12 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final AuthorService authorService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService, ApplicationEventPublisher applicationEventPublisher) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -35,11 +40,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Optional<Book> create(String name, Category category, Long authorId, Integer availableCopies) {
-        return Optional.of(this.bookRepository.save(new Book(name,
+        Book book=new Book(name,
                 category,
                 this.authorService.findById(authorId).orElseThrow(InvalidAuthorId::new),
-                availableCopies)));
+                availableCopies);
+        this.bookRepository.save(book);
+        this.applicationEventPublisher.publishEvent(new BookCreatedEvent(book));
+
+        return Optional.of(book);
 
     }
 
@@ -58,6 +68,11 @@ public class BookServiceImpl implements BookService {
         Book book = findById(id).orElseThrow(InvalidAuthorId::new);
         this.bookRepository.delete(book);
         return Optional.of(book);
+    }
+
+    @Override
+    public void bookCreated() {
+        System.out.println("Book created");
     }
 
     @Override
