@@ -5,7 +5,6 @@ import com.example.library.model.Category;
 import com.example.library.model.events.BookCreatedEvent;
 import com.example.library.model.exceptions.InvalidAuthorId;
 import com.example.library.model.exceptions.InvalidBookIdException;
-import com.example.library.model.exceptions.NoAvailableCopies;
 import com.example.library.repository.BookRepository;
 import com.example.library.service.AuthorService;
 import com.example.library.service.BookService;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import com.example.library.model.exceptions.BookNotFoundException;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -76,12 +76,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> lowerAvailableCopies(Long id) throws NoAvailableCopies {
-        Book book = findById(id).orElseThrow(InvalidAuthorId::new);
-        if (book.getAvailableCopies() == 0){
-            throw new NoAvailableCopies();
-        }
-        book.setAvailableCopies(book.getAvailableCopies() - 1);
-        return Optional.of(this.bookRepository.save(book));
+    public void getCopy(Long id) {
+        Book book = findById(id).orElseThrow(BookNotFoundException::new);
+        book.getCopy();
+        this.bookRepository.save(book);
+    }
+    @Override
+    public void returnCopy(Long id) {
+        Book book = findById(id).orElseThrow(BookNotFoundException::new);
+        book.returnCopy();
+        this.bookRepository.save(book);
     }
 }

@@ -20,6 +20,15 @@ public class Book {
     Author author;
 
     Integer availableCopies;
+
+    public void getCopy()
+    {
+        this.availableCopies--;
+    }
+    public void returnCopy()
+    {
+        this.availableCopies++;
+    }
     public Book(String name, Category category, Author author, Integer availableCopies) {
         this.name = name;
         this.category = category;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/books")
 public class BookRestController {
     private final BookService bookService;
@@ -45,11 +46,21 @@ public class BookRestController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<Book> editBook(@PathVariable Long id, @RequestBody BookDto bookDto)
     {
         return bookService.update(id, bookDto.getName(), bookDto.getCategory(), bookDto.getAuthorId(), bookDto.getAvailableCopies())
                 .map(book -> ResponseEntity.ok().body(book))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @PostMapping("/getcopy/{id}")
+    public ResponseEntity<Void> getCopy(@PathVariable Long id){
+        this.bookService.getCopy(id);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/addcopy/{id}")
+    public ResponseEntity<Void> addCopy(@PathVariable Long id){
+        this.bookService.returnCopy(id);
+        return ResponseEntity.ok().build();
     }
 }
