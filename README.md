@@ -37,27 +37,39 @@ The Country entity includes:
 - Name (String)
 - Continent (String)
 
+# [Lab2](https://github.com/Fazlibeqir/EMT/tree/main/Lab2/frontend)
+
+
+# React App with API Endpoints
+
+This React application interacts with a backend API that provides endpoints for managing authors, books, and countries.
+
 ## API Endpoints
-- Author
-- `GET /authors/{id}`: Retrieve a author by id.
-- `GET /authors`: Retrieve all authors.
-- `POST /authors/add`: Add a new author.
-- `POST /authors/{id}`: Update author details.
-- `DELETE /authors/{id}`: Delete a author.
 
-- Book
-- `GET /books`: Retrieve all books.
-- `GET /books/{id}`: Retrieve a book by id.
-- `POST /books/add`: Add a new book.
-- `POST /books/edit/{id}`: Update book details.
-- `DELETE /books/delete/{id}`: Delete a book.
+### Authors
 
-- Country
-- `GET /countries`: Retrieve all countries.
-- `GET /countries/{id}`: Retrieve a country by id.
-- `POST /countries/add`: Add a new country.
-- `POST /countries/{id}`: Update country details.
-- `DELETE /countries/{id}`: Delete a contry.
+- `GET /authors`: Retrieves all authors.
+
+### Books
+
+- `GET /books`: Retrieves all books.
+- `GET /books/{id}`: Retrieves a book by ID.
+- `POST /books/add`: Adds a new book.
+- `PUT /books/edit/{id}`: Updates book details.
+- `POST /books/getcopy/{id}`: Decrements available copies when getting a copy.
+- `POST /books/addcopy/{id}`: Increments available copies when returning a copy.
+- `DELETE /books/delete/{id}`: Deletes a book.
+
+### Countries
+
+- `GET /countries`: Retrieves all countries.
+
+## Getting Started
+
+1. Clone this repository.
+2. Run Backend Java Spring app
+3. Install dependencies with `npm install`.
+4. Run the development server with `npm start`.
 
 
 ## Contribution
