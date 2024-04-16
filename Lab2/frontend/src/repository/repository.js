@@ -17,20 +17,29 @@ const Repository = {
         return axios.delete(`/books/delete/${id}`);
     },
     addBook:(name,category,author,copies)=>{
-        return axios.post("/book/add",{
-            "name":name,
-            "category":category,
-            "author":author,
-            "availableCopies":copies
+        return axios.post("/books/add",{
+            name:name,
+            category:category,
+            authorId:author,
+            availableCopies:copies
         })
     },
     editBook:(id,name,category,author,copies)=>{
         return axios.put(`/books/edit/${id}`,{
-            "name":name,
-            "category":category,
-            "author":author,
-            "availableCopies":copies
+            name:name,
+            category:category,
+            authorId:author,
+            availableCopies:copies
         })
+    },
+    getCopy:(id)=>{
+        return axios.post(`/books/getcopy/${id}`);
+    },
+    addCopy:(id)=>{
+        return axios.post(`/books/addcopy/${id}`);
+    },
+    getBook:(id)=>{
+        return axios.get(`/books/${id}`);
     },
 
 }
