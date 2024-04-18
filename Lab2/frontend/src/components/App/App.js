@@ -2,7 +2,7 @@ import './App.css';
 import React, {Component} from 'react';
 import {BrowserRouter as Routes, Redirect , Route} from "react-router-dom";
 import Repository from "../../repository/repository";
-import Authors from "../Authors/authors";
+import Authors from "../Authors/AuthorList/authors";
 import Categories from "../Categories/categories";
 import Countries from "../Countries/countries";
 import Header from "../Header/header";
