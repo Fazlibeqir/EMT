@@ -1,6 +1,6 @@
 import './App.css';
 import React, {Component} from 'react';
-import {BrowserRouter as Routes, Redirect , Route} from "react-router-dom";
+import {BrowserRouter as Routes, Redirect , Route, Switch} from "react-router-dom";
 import Repository from "../../repository/repository";
 import Authors from "../Authors/AuthorList/authors";
 import Categories from "../Categories/categories";
@@ -19,7 +19,8 @@ class App extends Component {
             authors: [],
             categories: [],
             countries: [],
-            selectedBook: {}
+            selectedBook: {},
+            redirectFromAdd: false,
         }
     }
     loadBooks = () => {
@@ -64,6 +65,10 @@ class App extends Component {
         Repository.addBook(name,category,author,availableCopies)
             .then(()=>{
                 this.loadBooks();
+                this.setState({redirectFromAdd:true});
+            })
+            .catch((err)=>{
+                console.error('Error while adding book: ',err);
             })
     }
     editBook=(id,name,category,author,availableCopies)=>{
@@ -100,11 +105,13 @@ class App extends Component {
     }
 
     render() {
+        const {redirectFromAdd} = this.state;
         return (
             <Routes>
                 <Header/>
                 <main>
                     <div className="container">
+                        <Switch>
                         <Route path={"/categories"} exact render={() =>
                             <Categories
                                 categories={this.state.categories}/>}/>
@@ -133,6 +140,8 @@ class App extends Component {
                                 onAddCopy={this.addBookCopy}
                                 onEdit={this.getBook}/>}/>
                         <Redirect to={"/"}/>
+                        </Switch>
+                        {redirectFromAdd && <Redirect to={"/books"}/>}
                     </div>
                 </main>
             </Routes>
