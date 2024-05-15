@@ -9,11 +9,11 @@ import java.time.Instant;
 
 @Getter
 public class DomainEvent {
-    private String topic;
-    private Date date;
+    private final String topic;
+    private final Date date;
 
     public DomainEvent(String topic) {
-        this.date = new Date(String.valueOf(Instant.now()));
+        this.date = new Date(Instant.now().toEpochMilli());
         this.topic = topic;
     }
     public String toJson() {

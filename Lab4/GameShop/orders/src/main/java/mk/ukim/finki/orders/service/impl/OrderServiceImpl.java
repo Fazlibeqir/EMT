@@ -11,6 +11,8 @@ import mk.ukim.finki.orders.domain.repository.OrderRepository;
 import mk.ukim.finki.orders.service.OrderService;
 import mk.ukim.finki.orders.service.froms.OrderForm;
 import mk.ukim.finki.orders.service.froms.OrderItemForm;
+import mk.ukim.finki.sharedkernel.domain.events.orders.OrderItemCreated;
+import mk.ukim.finki.sharedkernel.infra.DomainEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolationException;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final DomainEventPublisher domainEventPublisher;
     private final Validator validator;
 
 
@@ -37,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ConstraintViolationException("The order form is not valid", constraintViolations);
         }
         var newOrder = orderRepository.saveAndFlush(toDomainObject(orderForm));
+        newOrder.getOrderItems().forEach(item->domainEventPublisher.publish(new OrderItemCreated(item.getGameId().getId(),item.getQuantity())));
         return newOrder.getId();
     }
     @Override
@@ -54,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderIdNotExistException::new);
         order.addItem(orderItemForm.getGames(), orderItemForm.getQuantity());
         orderRepository.saveAndFlush(order);
+        domainEventPublisher.publish(new OrderItemCreated(orderItemForm.getGames().getId().getId(),orderItemForm.getQuantity()));
 
     }
 

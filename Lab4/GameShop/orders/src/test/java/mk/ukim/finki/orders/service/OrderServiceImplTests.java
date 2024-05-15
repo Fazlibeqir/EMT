@@ -69,24 +69,8 @@ public class OrderServiceImplTests {
 
         OrderId newOrderId = orderService.placeOrder(orderForm);
         Order newOrder = orderService.findById(newOrderId).orElseThrow(OrderIdNotExistException::new);
-
-        Currency currency = newOrder.getCurrency();
-
-        List<Money> gamesWithSameCurrency = newOrder.getOrderItems().stream()
-                .filter(item -> gamesList.stream()
-                        .anyMatch(game->game.getId().equals(item.getGameId()) && game.getPrice().getCurrency().name().equals(currency.name())))
-                .map(item -> item.getItemPrice().multiply(item.getQuantity()))
-                .collect(Collectors.toList());
-
-        Money totalWithSameCurrency = Money.zero(currency);
-
-        for(Money money : gamesWithSameCurrency) {
-            totalWithSameCurrency = totalWithSameCurrency.add(money);
-        }
-
-
-        Assertions.assertEquals(totalWithSameCurrency.getCurrency(),newOrder.total().getCurrency());
-        Assertions.assertEquals(totalWithSameCurrency.getAmount(),newOrder.total().getAmount());
+        Money outMoney = p1.getPrice().multiply(oi1.getQuantity()).add(p2.getPrice().multiply(oi2.getQuantity()));
+        Assertions.assertEquals(newOrder.total(),outMoney);
     }
 
 
